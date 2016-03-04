@@ -14,16 +14,28 @@
 
 import os
 from flask import Flask, jsonify
+from flask.ext.mysql import MySQL
 
 app = Flask(__name__)
+mysql = MySQL()
+
+# MySQL configurations
+app.config['MYSQL_DATABASE_USER'] = 'b1cb15a23fa673'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'f243e376'
+app.config['MYSQL_DATABASE_DB'] = 'ad_6797d9adb814dd1'
+app.config['MYSQL_DATABASE_HOST'] = 'us-cdbr-iron-east-03.cleardb.net'
+mysql.init_app(app)
+
 
 @app.route('/')
 def Welcome():
     return app.send_static_file('index.html')
 
+
 @app.route('/myapp')
 def WelcomeToMyapp():
     return 'Welcome again to my app running on Bluemix!'
+
 
 @app.route('/api/people')
 def GetPeople():
@@ -33,6 +45,7 @@ def GetPeople():
     ]
     return jsonify(results=list)
 
+
 @app.route('/api/people/<name>')
 def SayHello(name):
     message = {
@@ -40,6 +53,18 @@ def SayHello(name):
     }
     return jsonify(results=message)
 
+
+@app.route('/api/products')
+def listProducts():
+    cursor = mysql.connect().cursor()
+    cursor.execute("SELECT * FROM products;")
+    data = cursor.fetchall()
+    if data is None:
+        return "no products in your fridge"
+    else:
+        return jsonify(results=data)
+
+
 port = os.getenv('PORT', '5000')
 if __name__ == "__main__":
-	app.run(host='0.0.0.0', port=int(port))
+    app.run(host='0.0.0.0', port=int(port))
