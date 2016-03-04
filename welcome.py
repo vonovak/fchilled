@@ -28,7 +28,7 @@ def WelcomeToMyapp():
 @app.route('/api/people')
 def GetPeople():
     list = [
-        {'name': 'John', 'age': 28},
+        {'name': 'John', 'age': 45},
         {'name': 'Bill', 'val': 26}
     ]
     return jsonify(results=list)
