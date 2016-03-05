@@ -64,7 +64,7 @@ class watsonThread(threading.Thread):
 
                 else:
 
-                    # PRODUCT
+                    #PRODUCT
                     if(watsonThread.lastaction == "inside_fridge"):
                         # PRODUCT TAKEN FROM FRIDGE
 
