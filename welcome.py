@@ -22,12 +22,13 @@ import base64
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://b1cb15a23fa673:f243e376@us-cdbr-iron-east-03.cleardb.net/ad_6797d9adb814dd1'
+app.config['UPLOAD_FOLDER'] = './uploads'
 db.init_app(app)
 
 from models.products import Product
 
-with app.app_context():
-    db.create_all() # In case user table doesn't exists already. Else remove it.
+#with app.app_context():
+#    db.create_all() # In case user table doesn't exists already. Else remove it.
 
 @app.route('/')
 def Welcome():
