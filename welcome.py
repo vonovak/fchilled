@@ -119,7 +119,13 @@ def watsontest():
 @app.route('/revert', methods=['POST'])
 def revert():
     print 'reverted'
-
+    tag = request.form['tag']
+    action = request.form['action']
+    prod = Product.query.filter_by(tag=tag).first();
+    if action == 'add':
+        prod.remove(1)
+    else:
+        prod.add(1)
 
 @app.route('/gcmtest')
 def gcmtest():
