@@ -28,6 +28,8 @@ app.config[
     'SQLALCHEMY_DATABASE_URI'] = 'db2://user05351:Lf7lc1LEbJls@5.10.125.192:50000/SQLDB'
 app.config['UPLOAD_FOLDER'] = './uploads'
 db.init_app(app)
+lastaction = ""
+
 
 from models.products import Product
 
@@ -38,6 +40,7 @@ with app.app_context():
 @app.route('/')
 def Welcome():
     products = Product.query.all()
+
     return render_template('index.html', products=products)
 
 
@@ -65,7 +68,8 @@ def watsontest():
 
 @app.route('/gcmtest')
 def gcmtest():
-    return sendNotification()
+    sendNotification()
+    return 'notification sent'
 
 
 @app.route('/api/upload-photo', methods=['POST'])
