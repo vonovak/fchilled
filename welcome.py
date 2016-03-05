@@ -67,6 +67,8 @@ def GetPicture():
 
 @app.route('/api/upload-photo', methods=['POST'])
 def upload_file():
+    if not os.path.isdir(app.config['UPLOAD_FOLDER']):
+        os.mkdir(app.config['UPLOAD_FOLDER'])
     myFile = request.files['file']
     myFile.save(os.path.join(app.config['UPLOAD_FOLDER'], myFile.filename))
     message = {
