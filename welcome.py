@@ -19,21 +19,25 @@ from models.products import db
 import time
 import base64
 from vision import callvisionapi
+from watsonthread import watsonThread
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://b1cb15a23fa673:f243e376@us-cdbr-iron-east-03.cleardb.net/ad_6797d9adb814dd1'
+app.config[
+    'SQLALCHEMY_DATABASE_URI'] = 'mysql://b1cb15a23fa673:f243e376@us-cdbr-iron-east-03.cleardb.net/ad_6797d9adb814dd1'
 app.config['UPLOAD_FOLDER'] = './uploads'
 db.init_app(app)
 
 from models.products import Product
 
 with app.app_context():
-    db.create_all() # In case user table doesn't exists already. Else remove it.
+    db.create_all()  # In case user table doesn't exists already. Else remove it.
+
 
 @app.route('/')
 def Welcome():
     products = Product.query.all()
     return render_template('index.html', products=products)
+
 
 @app.route('/setup')
 def Setup():
@@ -52,6 +56,7 @@ def Setup():
     db.session.commit()
     return 'setup'
 
+
 @app.route('/watsontest')
 def watsontest():
     return callvisionapi('test.jpg')
@@ -63,11 +68,14 @@ def upload_file():
         os.mkdir(app.config['UPLOAD_FOLDER'])
 
     filename = str(int(round(time.time() * 1000)))
-    myFile = open(app.config['UPLOAD_FOLDER']+'/'+filename+'.jpg', 'w')
+    myFile = open(app.config['UPLOAD_FOLDER'] + '/' + filename + '.jpg', 'w')
     myFile.write(base64.b64decode(request.data))
     myFile.close()
 
-    return jsonify(results=callvisionapi(filename))
+    thread1 = watsonThread(filename)
+    thread1.start()
+
+    return "File " + filename + " uploaded"
 
 
 port = os.getenv('PORT', '5000')
