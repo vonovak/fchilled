@@ -76,7 +76,20 @@ def Recipe(recipe):
             break
 
     if found:
-        return render_template('recipe.html', recipe=foundRecipe)
+        fridgeContent = []
+        for data in Product.query.all():
+            if data.count > 0:
+                fridgeContent.append(data.tag)
+
+        have = []
+        missing = []
+        for ingredient in foundRecipe['ingredients']:
+            if ingredient['id'] in fridgeContent:
+                have.append(ingredient['name'])
+            else:
+                missing.append(ingredient['name'])
+
+        return render_template('recipe.html', recipe=foundRecipe, have=have, missing=missing)
     else:
         return "Recipe " + recipe + " not found."
 
@@ -124,6 +137,18 @@ def upload_file():
     thread1.start()
 
     return "File " + filename + " uploaded"
+
+
+@app.route('/api/fridge-content')
+def FridgeContent():
+    content = []
+    for data in Product.query.all():
+        content.append({'name': data.name,
+                        'tag': data.tag,
+                        'id': data.id,
+                        'count': data.count})
+
+    return jsonify(FridgeContent=content)
 
 
 port = os.getenv('PORT', '5000')
