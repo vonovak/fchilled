@@ -7,8 +7,9 @@ from vision import callvisionapi
 from notification import sendNotification
 
 class watsonThread(threading.Thread):
-    lastaction = ""
+    lastaction = "empty"
     emptycount = 0
+    productpicture = ""
 
     def __init__(self, filename, app):
         threading.Thread.__init__(self)
@@ -51,30 +52,32 @@ class watsonThread(threading.Thread):
 
                         with self.app.app_context():
                             prod = Product.query.filter_by(tag=watsonThread.lastaction).first()
-                            prod.add(1)
+                            if(prod != None):
+                                prod.add(1)
 
 
                         # notify UI
                         sendNotification()
-                        notification = {'tag': watsonThread.lastaction, 'filename': self.filename, 'name':'nothing', 'action':'add' }
+                        notification = {'tag': watsonThread.lastaction, 'filename': watsonThread.productpicture, 'name':'nothing', 'action':'add' }
                         pusher.trigger('messages', 'new_product', notification)
 
                     watsonThread.lastaction = "inside_fridge"
 
                 else:
-
+                    watsonThread.productpicture = self.filename
                     #PRODUCT
                     if(watsonThread.lastaction == "inside_fridge"):
                         # PRODUCT TAKEN FROM FRIDGE
 
                         with self.app.app_context():
                             prod = Product.query.filter_by(tag=tag).first()
-                            prod.remove(1)
+                            if(prod != None):
+                                prod.remove(1)
 
 
                         # notify UI
                         sendNotification()
-                        notification = {'tag': tag, 'filename': self.filename, 'name':'nothing', 'action':'remove' }
+                        notification = {'tag': tag, 'filename': watsonThread.productpicture, 'name':'nothing', 'action':'remove' }
                         pusher.trigger('messages', 'new_product', notification)
 
                     watsonThread.lastaction = tag
