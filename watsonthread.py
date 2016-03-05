@@ -12,4 +12,5 @@ class watsonThread(threading.Thread):
 
         watson = callvisionapi(self.filename)
 
+
         print "Exiting " + self.filename
