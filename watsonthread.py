@@ -18,7 +18,7 @@ class watsonThread(threading.Thread):
         print "Starting " + self.filename
 
         tags = callvisionapi(self.filename)
-        tag = {'tag': tags["images"][0]["scores"][0]["name"], 'filename': 'filename'}
+        tag = tags["images"][0]["scores"][0]["name"]
 
         pusher = Pusher(
             app_id='185391',
@@ -28,17 +28,27 @@ class watsonThread(threading.Thread):
             ssl=True
         )
 
-        print("pushing tag: ")
+        print("received tag: ")
         print(tag)
-        sendNotification()
-        pusher.trigger('messages', 'new_product', tag)
 
         if(tag != watsonThread.lastaction):
             if(tag == "empty"):
+                # do nothing
                 watsonThread.lastaction = ""
             elif(tag == "hand_empty"):
+                # not used (yet)
                 watsonThread.lastaction = ""
             elif(tag == "inside_fridge"):
+                if(watsonThread.lastaction != "empty" and watsonThread.lastaction != "hand_empty"):
+                    # ADDING PRODUCT INTO FRIDGE
+                    prod = Product.query.filter_by(tag=tag).first()
+                    prod.add(1)
+
+                    # notify UI
+                    sendNotification()
+                    notification = {'tag': tag, 'filename': self.filename, 'name':prod.name }
+                    pusher.trigger('messages', 'new_product', notification)
+
                 watsonThread.lastaction = "inside_fridge"
             else:
                 # PRODUCT
@@ -46,7 +56,13 @@ class watsonThread(threading.Thread):
                     # PRODUCT TAKEN FROM FRIDGE
                     prod = Product.query.filter_by(tag=tag).first()
                     prod.remove(1)
-                    watsonThread.lastaction = tag
+
+                    # notify UI
+                    sendNotification()
+                    notification = {'tag': tag, 'filename': self.filename, 'name':prod.name }
+                    pusher.trigger('messages', 'new_product', notification)
+
+                watsonThread.lastaction = tag
 
 
         print "Exiting " + self.filename
