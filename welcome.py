@@ -20,10 +20,12 @@ import time
 import base64
 from vision import callvisionapi
 from watsonthread import watsonThread
+from notification import sendNotification
 
 app = Flask(__name__)
 app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'mysql://b1cb15a23fa673:f243e376@us-cdbr-iron-east-03.cleardb.net/ad_6797d9adb814dd1'
+    # 'SQLALCHEMY_DATABASE_URI'] = 'mysql://b1cb15a23fa673:f243e376@us-cdbr-iron-east-03.cleardb.net/ad_6797d9adb814dd1'
+    'SQLALCHEMY_DATABASE_URI'] = 'db2://user05351:Lf7lc1LEbJls@5.10.125.192:50000/SQLDB'
 app.config['UPLOAD_FOLDER'] = './uploads'
 db.init_app(app)
 
@@ -60,6 +62,10 @@ def Setup():
 @app.route('/watsontest')
 def watsontest():
     return callvisionapi('test.jpg')
+
+@app.route('/gcmtest')
+def gcmtest():
+    return sendNotification()
 
 
 @app.route('/api/upload-photo', methods=['POST'])
