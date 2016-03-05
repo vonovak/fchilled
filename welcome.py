@@ -27,8 +27,8 @@ db.init_app(app)
 
 from models.products import Product
 
-#with app.app_context():
-#    db.create_all() # In case user table doesn't exists already. Else remove it.
+with app.app_context():
+    db.create_all() # In case user table doesn't exists already. Else remove it.
 
 @app.route('/')
 def Welcome():
@@ -39,18 +39,20 @@ def Welcome():
 
 @app.route('/setup')
 def Setup():
-    product1 = Product('Coca-Cola', 1)
+    product1 = Product('cocacola', 'Coca-Cola', 0)
     db.session.add(product1)
 
-    product2 = Product('Juice', 1)
+    product2 = Product('juice', 'Juice', 0)
     db.session.add(product2)
 
-    product3 = Product('Beer', 1)
+    product3 = Product('beer', 'Beer', 0)
     db.session.add(product3)
+
+    product4 = Product('waterbottle', 'Bottled Water', 0)
+    db.session.add(product4)
 
     db.session.commit()
     return 'setup'
-
 
 @app.route('/watsontest')
 def watsontest():
