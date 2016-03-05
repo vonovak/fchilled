@@ -4,15 +4,17 @@ import json
 from pusher import Pusher
 from models.products import Product
 from vision import callvisionapi
+from models.products import db
 from notification import sendNotification
 
 
 class watsonThread(threading.Thread):
     lastaction = ""
 
-    def __init__(self, filename):
+    def __init__(self, filename, app):
         threading.Thread.__init__(self)
         self.filename = filename
+        self.app = app
 
     def run(self):
         print "Starting " + self.filename
@@ -45,8 +47,11 @@ class watsonThread(threading.Thread):
             elif(tag == "inside_fridge"):
                 if(watsonThread.lastaction != "empty" and watsonThread.lastaction != "hand_empty"):
                     # ADDING PRODUCT INTO FRIDGE
-                    # prod = Product.query.filter_by(tag=tag).first()
-                    # prod.add(1)
+
+                    with self.app.app_context():
+                        prod = Product.query.filter_by(tag=tag).first()
+                        prod.add(1)
+
 
                     # notify UI
                     sendNotification()
@@ -58,8 +63,11 @@ class watsonThread(threading.Thread):
                 # PRODUCT
                 if(watsonThread.lastaction == "inside_fridge"):
                     # PRODUCT TAKEN FROM FRIDGE
-                    # prod = Product.query.filter_by(tag=tag).first()
-                    # prod.remove(1)
+
+                    with self.app.app_context():
+                        prod = Product.query.filter_by(tag=tag).first()
+                        prod.remove(1)
+
 
                     # notify UI
                     sendNotification()

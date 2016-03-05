@@ -26,7 +26,7 @@ app = Flask(__name__)
 app.config[
     # 'SQLALCHEMY_DATABASE_URI'] = 'mysql://b1cb15a23fa673:f243e376@us-cdbr-iron-east-03.cleardb.net/ad_6797d9adb814dd1'
     'SQLALCHEMY_DATABASE_URI'] = 'db2://user05351:Lf7lc1LEbJls@5.10.125.192:50000/SQLDB'
-app.config['UPLOAD_FOLDER'] = './static/images'
+app.config['UPLOAD_FOLDER'] = './static/images/upload'
 db.init_app(app)
 lastaction = ""
 
@@ -70,7 +70,9 @@ def Setup():
 
 @app.route('/watsontest')
 def watsontest():
-    return callvisionapi('test.jpg')
+    thread1 = watsonThread(app.config['UPLOAD_FOLDER'] + '/test.jpg', app)
+    thread1.start()
+    return "test file uploaded"
 
 @app.route('/gcmtest')
 def gcmtest():
@@ -88,7 +90,7 @@ def upload_file():
     myFile.write(base64.b64decode(request.data))
     myFile.close()
 
-    thread1 = watsonThread(filename)
+    thread1 = watsonThread(filename, app)
     thread1.start()
 
     return "File " + filename + " uploaded"
