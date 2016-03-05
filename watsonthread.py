@@ -45,12 +45,12 @@ class watsonThread(threading.Thread):
             elif(tag == "inside_fridge"):
                 if(watsonThread.lastaction != "empty" and watsonThread.lastaction != "hand_empty"):
                     # ADDING PRODUCT INTO FRIDGE
-                    prod = Product.query.filter_by(tag=tag).first()
-                    prod.add(1)
+                    # prod = Product.query.filter_by(tag=tag).first()
+                    # prod.add(1)
 
                     # notify UI
                     sendNotification()
-                    notification = {'tag': tag, 'filename': self.filename, 'name':prod.name }
+                    notification = {'tag': tag, 'filename': self.filename, 'name':'nothing' }
                     pusher.trigger('messages', 'new_product', notification)
 
                 watsonThread.lastaction = "inside_fridge"
@@ -58,12 +58,12 @@ class watsonThread(threading.Thread):
                 # PRODUCT
                 if(watsonThread.lastaction == "inside_fridge"):
                     # PRODUCT TAKEN FROM FRIDGE
-                    prod = Product.query.filter_by(tag=tag).first()
-                    prod.remove(1)
+                    # prod = Product.query.filter_by(tag=tag).first()
+                    # prod.remove(1)
 
                     # notify UI
                     sendNotification()
-                    notification = {'tag': tag, 'filename': self.filename, 'name':prod.name }
+                    notification = {'tag': tag, 'filename': self.filename, 'name':'nothing' }
                     pusher.trigger('messages', 'new_product', notification)
 
                 watsonThread.lastaction = tag
