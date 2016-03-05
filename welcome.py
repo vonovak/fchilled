@@ -68,7 +68,8 @@ def watsontest():
 
 @app.route('/gcmtest')
 def gcmtest():
-    return sendNotification()
+    sendNotification()
+    return 'notification sent'
 
 
 @app.route('/api/upload-photo', methods=['POST'])
