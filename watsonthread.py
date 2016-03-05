@@ -47,7 +47,7 @@ class watsonThread(threading.Thread):
 
                 elif(tag == "inside_fridge" or tag == "hand_empty"):
 
-                    if(watsonThread.lastaction != "empty" and watsonThread.lastaction != "hand_empty"):
+                    if(watsonThread.lastaction != "empty" and watsonThread.lastaction != "hand_empty" and watsonThread.lastaction != "inside_fridge"):
                         # ADDING PRODUCT INTO FRIDGE
 
                         with self.app.app_context():
