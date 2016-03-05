@@ -7,5 +7,5 @@
  python-gcm==0.4
  ibm_db==2.0.6
  ibm_db_sa==0.3.2
- pusher==1.2.3
  cffi==1.5.2
+ pusher==1.2.3
