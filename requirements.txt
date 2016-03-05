@@ -4,3 +4,8 @@
  sqlalchemy-migrate==0.7.2
  MySQL-python==1.2.5
  watson_developer_cloud==0.8.0
+ python-gcm==0.4
+ ibm_db==2.0.6
+ ibm_db_sa==0.3.2
+ cffi==1.5.2
+ pusher==1.2.3
