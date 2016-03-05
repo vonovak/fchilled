@@ -18,7 +18,11 @@ class watsonThread(threading.Thread):
         print "Starting " + self.filename
 
         tags = callvisionapi(self.filename)
-        tag = tags["images"][0]["scores"][0]["name"]
+
+        if("scores" in tags["images"][0]):
+            tag = tags["images"][0]["scores"][0]["name"]
+        else:
+            tag = "empty"
 
         pusher = Pusher(
             app_id='185391',
