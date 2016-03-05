@@ -4,6 +4,8 @@ import json
 from pusher import Pusher
 from models.products import Product
 from vision import callvisionapi
+from notification import sendNotification
+
 
 class watsonThread(threading.Thread):
     lastaction = ""
@@ -16,7 +18,7 @@ class watsonThread(threading.Thread):
         print "Starting " + self.filename
 
         tags = callvisionapi(self.filename)
-        tag = tags["images"][0]["scores"][0]["name"]
+        tag = {'tag': tags["images"][0]["scores"][0]["name"], 'filename': 'filename'}
 
         pusher = Pusher(
             app_id='185391',
@@ -28,6 +30,7 @@ class watsonThread(threading.Thread):
 
         print("pushing tag: ")
         print(tag)
+        sendNotification()
         pusher.trigger('messages', 'new_product', tag)
 
         if(tag != watsonThread.lastaction):
