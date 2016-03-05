@@ -13,7 +13,9 @@
 # limitations under the License.
 
 import os
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, redirect, url_for
+from inspect import getmembers
+from pprint import pprint
 
 app = Flask(__name__)
 
@@ -22,6 +24,7 @@ app.config['MYSQL_DATABASE_USER'] = 'b1cb15a23fa673'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'f243e376'
 app.config['MYSQL_DATABASE_DB'] = 'ad_6797d9adb814dd1'
 app.config['MYSQL_DATABASE_HOST'] = 'us-cdbr-iron-east-03.cleardb.net'
+app.config['UPLOAD_FOLDER'] = './uploads'
 
 
 @app.route('/')
@@ -51,10 +54,23 @@ def SayHello(name):
     return jsonify(results=message)
 
 
-@app.route('/api/picture', methods=['POST'])
+@app.route('/api/picture2', methods=['POST'])
 def GetPicture():
     message = {
-        'message': request.form
+        'form': request.form,
+        'data': request.data,
+        'args': request.args,
+    }
+    pprint(getmembers(request))
+    return jsonify(results=message)
+
+
+@app.route('/api/upload-photo', methods=['POST'])
+def upload_file():
+    myFile = request.files['file']
+    myFile.save(os.path.join(app.config['UPLOAD_FOLDER'], myFile.filename))
+    message = {
+        'status': 'uploaded',
     }
     return jsonify(results=message)
 
