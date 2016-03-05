@@ -10,6 +10,7 @@ from notification import sendNotification
 
 class watsonThread(threading.Thread):
     lastaction = ""
+    emptycount = 0
 
     def __init__(self, filename, app):
         threading.Thread.__init__(self)
@@ -38,9 +39,15 @@ class watsonThread(threading.Thread):
 
             if(tag != watsonThread.lastaction):
                 if(tag == "empty"):
+
                     # do nothing
-                    watsonThread.lastaction = ""
+                    watsonThread.emptycount += 1
+                    # TO MAKE SURE THE EMPTY TAG WASNT MISRECOGNIZED
+                    if(watsonThread.emptycount > 1):
+                        watsonThread.lastaction = ""
+
                 elif(tag == "inside_fridge" or tag == "hand_empty"):
+
                     if(watsonThread.lastaction != "empty" and watsonThread.lastaction != "hand_empty"):
                         # ADDING PRODUCT INTO FRIDGE
 
@@ -55,7 +62,9 @@ class watsonThread(threading.Thread):
                         pusher.trigger('messages', 'new_product', notification)
 
                     watsonThread.lastaction = "inside_fridge"
+
                 else:
+
                     # PRODUCT
                     if(watsonThread.lastaction == "inside_fridge"):
                         # PRODUCT TAKEN FROM FRIDGE
