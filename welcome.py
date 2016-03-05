@@ -26,7 +26,7 @@ app = Flask(__name__)
 app.config[
     # 'SQLALCHEMY_DATABASE_URI'] = 'mysql://b1cb15a23fa673:f243e376@us-cdbr-iron-east-03.cleardb.net/ad_6797d9adb814dd1'
     'SQLALCHEMY_DATABASE_URI'] = 'db2://user05351:Lf7lc1LEbJls@5.10.125.192:50000/SQLDB'
-app.config['UPLOAD_FOLDER'] = './static/images'
+app.config['UPLOAD_FOLDER'] = './static/images/upload/'
 app.config['RECIPES'] = [{'id': 'cuba_libre', 'name': 'Cuba libre',
                           'ingredients': [{'id': 'bacardi_oro', 'name': 'Bacardi Oro'},
                                           {'id': 'cocacola', 'name': 'Coca Cola'}, ]},
@@ -116,6 +116,10 @@ def Setup():
 def watsontest():
     return callvisionapi('test.jpg')
 
+@app.route('/revert', methods=['POST'])
+def revert():
+    print 'reverted'
+
 
 @app.route('/gcmtest')
 def gcmtest():
@@ -126,14 +130,14 @@ def gcmtest():
 @app.route('/api/upload-photo', methods=['POST'])
 def upload_file():
     if not os.path.isdir(app.config['UPLOAD_FOLDER']):
-        os.mkdir(app.config['UPLOAD_FOLDER'])
+        os.makedirs(app.config['UPLOAD_FOLDER'])
 
     filename = str(int(round(time.time() * 1000)))
     myFile = open(app.config['UPLOAD_FOLDER'] + '/' + filename + '.jpg', 'w')
     myFile.write(base64.b64decode(request.data))
     myFile.close()
 
-    thread1 = watsonThread(filename)
+    thread1 = watsonThread(filename,app)
     thread1.start()
 
     return "File " + filename + " uploaded"
