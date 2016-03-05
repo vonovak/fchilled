@@ -11,3 +11,9 @@ class Product(db.Model):
         self.tag = tag
         self.name = name
         self.count = count
+
+    def add(self, count):
+        self.count += count
+
+    def remove(self, count):
+        self.count -= count

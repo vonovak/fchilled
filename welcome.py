@@ -33,8 +33,6 @@ with app.app_context():
 @app.route('/')
 def Welcome():
     products = Product.query.all()
-    #str = pprint.pformat(products.name)
-    #return str
     return render_template('index.html', products=products)
 
 @app.route('/setup')
