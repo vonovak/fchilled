@@ -26,7 +26,7 @@ app = Flask(__name__)
 app.config[
     # 'SQLALCHEMY_DATABASE_URI'] = 'mysql://b1cb15a23fa673:f243e376@us-cdbr-iron-east-03.cleardb.net/ad_6797d9adb814dd1'
     'SQLALCHEMY_DATABASE_URI'] = 'db2://user05351:Lf7lc1LEbJls@5.10.125.192:50000/SQLDB'
-app.config['UPLOAD_FOLDER'] = './static/images'
+app.config['UPLOAD_FOLDER'] = './static/images/upload/'
 app.config['RECIPES'] = [{'id': 'cuba_libre', 'name': 'Cuba libre',
                           'ingredients': [{'id': 'bacardi_oro', 'name': 'Bacardi Oro'},
                                           {'id': 'cocacola', 'name': 'Coca Cola'}, ]},
@@ -76,7 +76,20 @@ def Recipe(recipe):
             break
 
     if found:
-        return render_template('recipe.html', recipe=foundRecipe)
+        fridgeContent = []
+        for data in Product.query.all():
+            if data.count > 0:
+                fridgeContent.append(data.tag)
+
+        have = []
+        missing = []
+        for ingredient in foundRecipe['ingredients']:
+            if ingredient['id'] in fridgeContent:
+                have.append(ingredient['name'])
+            else:
+                missing.append(ingredient['name'])
+
+        return render_template('recipe.html', recipe=foundRecipe, have=have, missing=missing)
     else:
         return "Recipe " + recipe + " not found."
 
@@ -123,7 +136,7 @@ def gcmtest():
 @app.route('/api/upload-photo', methods=['POST'])
 def upload_file():
     if not os.path.isdir(app.config['UPLOAD_FOLDER']):
-        os.mkdir(app.config['UPLOAD_FOLDER'])
+        os.makedirs(app.config['UPLOAD_FOLDER'])
 
     filename = str(int(round(time.time() * 1000)))
     myFile = open(app.config['UPLOAD_FOLDER'] + '/' + filename + '.jpg', 'w')
@@ -134,6 +147,18 @@ def upload_file():
     thread1.start()
 
     return "File " + filename + " uploaded"
+
+
+@app.route('/api/fridge-content')
+def FridgeContent():
+    content = []
+    for data in Product.query.all():
+        content.append({'name': data.name,
+                        'tag': data.tag,
+                        'id': data.id,
+                        'count': data.count})
+
+    return jsonify(FridgeContent=content)
 
 
 port = os.getenv('PORT', '5000')

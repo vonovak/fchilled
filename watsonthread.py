@@ -47,7 +47,7 @@ class watsonThread(threading.Thread):
 
                 elif(tag == "inside_fridge" or tag == "hand_empty"):
 
-                    if(watsonThread.lastaction != "empty" and watsonThread.lastaction != "hand_empty"):
+                    if(watsonThread.lastaction != "empty" and watsonThread.lastaction != "hand_empty" and watsonThread.lastaction != "inside_fridge"):
                         # ADDING PRODUCT INTO FRIDGE
 
                         with self.app.app_context():
@@ -57,7 +57,7 @@ class watsonThread(threading.Thread):
 
                         # notify UI
                         sendNotification()
-                        notification = {'tag': watsonThread.lastaction, 'filename': self.filename, 'name':'nothing' }
+                        notification = {'tag': watsonThread.lastaction, 'filename': self.filename, 'name':'nothing', 'action':'add' }
                         pusher.trigger('messages', 'new_product', notification)
 
                     watsonThread.lastaction = "inside_fridge"
@@ -75,7 +75,7 @@ class watsonThread(threading.Thread):
 
                         # notify UI
                         sendNotification()
-                        notification = {'tag': tag, 'filename': self.filename, 'name':'nothing' }
+                        notification = {'tag': tag, 'filename': self.filename, 'name':'nothing', 'action':'remove' }
                         pusher.trigger('messages', 'new_product', notification)
 
                     watsonThread.lastaction = tag
