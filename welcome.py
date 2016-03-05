@@ -26,8 +26,8 @@ db.init_app(app)
 
 from models.products import Product
 
-with app.app_context():
-    db.create_all() # In case user table doesn't exists already. Else remove it.
+#with app.app_context():
+#    db.create_all() # In case user table doesn't exists already. Else remove it.
 
 @app.route('/')
 def Welcome():
