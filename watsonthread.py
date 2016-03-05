@@ -6,7 +6,6 @@ from models.products import Product
 from vision import callvisionapi
 from notification import sendNotification
 
-
 class watsonThread(threading.Thread):
     lastaction = "empty"
     emptycount = 0

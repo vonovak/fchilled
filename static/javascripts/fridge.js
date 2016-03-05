@@ -14,7 +14,7 @@ var Form = React.createClass({
             tag: tag,
             action: action
         }
-        $.post('http://fchilled.eu-gb.mybluemix.net/revert', message).success(function() {
+        $.post('/revert', message).success(function() {
             console.log('posted');
         });
     },
