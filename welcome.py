@@ -13,12 +13,12 @@
 # limitations under the License.
 
 import os
-
 from flask import Flask, jsonify, request
 from flask import render_template
 from models.products import db
 import time
 import base64
+from vision import callvisionapi
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://b1cb15a23fa673:f243e376@us-cdbr-iron-east-03.cleardb.net/ad_6797d9adb814dd1'
@@ -52,23 +52,28 @@ def Setup():
     return 'setup'
 
 
+@app.route('/watsontest')
+def watsontest():
+    return callvisionapi('test.jpg')
+
+
 @app.route('/api/upload-photo', methods=['POST'])
 def upload_file():
-
     if not os.path.isdir(app.config['UPLOAD_FOLDER']):
         os.mkdir(app.config['UPLOAD_FOLDER'])
 
-    myFile = open(app.config['UPLOAD_FOLDER']+'/'+str(int(round(time.time() * 1000)))+'.jpg', 'w')
+    filename = str(int(round(time.time() * 1000)))
+    myFile = open(app.config['UPLOAD_FOLDER']+'/'+filename+'.jpg', 'w')
     myFile.write(base64.b64decode(request.data))
     myFile.close()
 
     message = {
         'status': 'uploaded',
     }
-    return jsonify(results=message)
+
+    return jsonify(results=callvisionapi(filename))
 
 
 port = os.getenv('PORT', '5000')
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(port), debug=True)
-
