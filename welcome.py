@@ -13,18 +13,15 @@
 # limitations under the License.
 
 import os
-from flask import Flask, jsonify
-from flask.ext.mysql import MySQL
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
-mysql = MySQL()
 
 # MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = 'b1cb15a23fa673'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'f243e376'
 app.config['MYSQL_DATABASE_DB'] = 'ad_6797d9adb814dd1'
 app.config['MYSQL_DATABASE_HOST'] = 'us-cdbr-iron-east-03.cleardb.net'
-mysql.init_app(app)
 
 
 @app.route('/')
@@ -54,15 +51,12 @@ def SayHello(name):
     return jsonify(results=message)
 
 
-@app.route('/api/products')
-def listProducts():
-    cursor = mysql.connect().cursor()
-    cursor.execute("SELECT * FROM products;")
-    data = cursor.fetchall()
-    if data is None:
-        return "no products in your fridge"
-    else:
-        return jsonify(results=data)
+@app.route('/api/picture', methods=['POST'])
+def GetPicture():
+    message = {
+        'message': request.form
+    }
+    return jsonify(results=message)
 
 
 port = os.getenv('PORT', '5000')
