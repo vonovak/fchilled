@@ -120,7 +120,7 @@ def upload_file():
     myFile.write(base64.b64decode(request.data))
     myFile.close()
 
-    thread1 = watsonThread(filename)
+    thread1 = watsonThread(filename,app)
     thread1.start()
 
     return "File " + filename + " uploaded"
