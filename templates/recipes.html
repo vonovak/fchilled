@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <title>Bootstrap 101 Template</title>
+
+        <!-- Bootstrap -->
+        <link href="http://fchilled.eu-gb.mybluemix.net/static/stylesheets/main.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <script type="text/javascript" src="http://fchilled.eu-gb.mybluemix.net/static/javascripts/main.js"></script>
+        <link rel="manifest" href="http://fchilled.eu-gb.mybluemix.net/static/manifest.json">
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+        <style>
+            body {
+                background-color: #FBE9E7;
+                font-family: 'Roboto', sans-serif;
+            }
+
+            h1 {
+                margin-bottom: 20px;
+                color: white;
+            }
+
+            h2 {
+                margin-top: 0px;
+            }
+
+            img {
+                width: 140px;
+            }
+
+            .header {
+                background-color: #FF5722;
+                margin-bottom: 5px;
+            }
+
+            .first {
+                background-color: #FDD835;
+            }
+
+            .first h2 {
+                border-bottom: 2px solid #F9A825;
+            }
+
+            .second {
+                background-color: #F9A825;
+            }
+
+            .second h2 {
+                border-bottom: 2px solid #FDD835;
+            }
+
+            a {
+                color: #000000;
+                text-decoration: none;
+            }
+
+            a:hover {
+                color: #6E3909;
+            }
+
+            .recipe-wrapper {
+                padding: 5px;
+            }
+
+            .recipe {
+                padding: 12px;
+                min-height: 100px;
+            }
+
+            .recipe-description {
+                width: 100%;
+                margin-left: -140px;
+                padding-left: 152px;
+                box-sizing: border-box;
+                overflow: hidden;
+                word-wrap: break-word;
+            }
+
+
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h1>Recipes</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            {% for product in products %}
+                <li>{{product.name}}: {{product.count}} </li>
+            {% endfor %}
+
+
+            <div class="row">
+                <a href="?recipe=cuba_libre" class="col-xs-12 col-sm-6 recipe-wrapper">
+                    <div class="recipe first">
+                        <div class="recipe-description pull-right">
+                            <h2>Cuba libre</h2>
+                            <h4>Ingredients</h4>
+                            <ul>
+                                <li>Bacardi Oro</li>
+                                <li>Coca Cola</li>
+                            </ul>
+                        </div>
+                        <img src="img/cuba_libre.jpg" class="img-responsive img-thumbnail pull-left">
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+                <a href="?recipe=vodka_with_juice" class="col-xs-12 col-sm-6 recipe-wrapper">
+                    <div class="recipe second">
+                        <div class="recipe-description pull-right">
+                            <h2>Vodka with juice</h2>
+                            <h4>Ingredients</h4>
+                            <ul>
+                                <li>Vodka</li>
+                                <li>Juice</li>
+                            </ul>
+                        </div>
+                        <img src="img/vodka_with_juice.jpg" class="img-responsive img-thumbnail pull-left">
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="row">
+                <a href="?recipe=mojito" class="col-xs-12 col-sm-6 col-sm-push-6 recipe-wrapper">
+                    <div class="recipe first">
+                        <div class="recipe-description pull-right">
+                            <h2>Mojito</h2>
+                            <h4>Ingredients</h4>
+                            <ul>
+                                <li>Bacardi Carta Blanco</li>
+                                <li>Lime</li>
+                                <li>Mint leaves</li>
+                                <li>Caster sugar</li>
+                                <li>Soda water</li>
+                                <li>Cubed ice</li>
+                                <li>Coca Cola</li>
+                            </ul>
+                        </div>
+                        <img src="img/mojito.jpg" class="img-responsive img-thumbnail pull-left">
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+                <a href="?recipe=pina_colada"  class="col-xs-12 col-sm-6 col-sm-pull-6 recipe-wrapper">
+                    <div class="recipe second">
+                        <div class="recipe-description pull-right">
+                            <h2>Pina colada</h2>
+                            <h4>Ingredients</h4>
+                            <ul>
+                                <li>Pineapple</li>
+                                <li>Sugar</li>
+                                <li>Coconut cream</li>
+                                <li>Bacardi Carta Blanco</li>
+                                <li>Pineapple juice</li>
+                                <li>Ice</li>
+                            </ul>
+                        </div>
+                        <img src="img/pina_colada.jpg" class="img-responsive img-thumbnail pull-left">
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="http://fchilled.eu-gb.mybluemix.net/static/javascripts/bootstrap.min.js"></script>
+    </body>
+</html>

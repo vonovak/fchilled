@@ -69,4 +69,5 @@ class watsonThread(threading.Thread):
                 watsonThread.lastaction = tag
 
 
+
         print "Exiting " + self.filename
