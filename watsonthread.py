@@ -4,7 +4,6 @@ import json
 from pusher import Pusher
 from models.products import Product
 from vision import callvisionapi
-from models.products import db
 from notification import sendNotification
 
 

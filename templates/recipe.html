@@ -94,39 +94,12 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h1>Recipes</h1>
+                        <h1>Recipes <small>{{ recipe.name }}</small></h1>
                     </div>
                 </div>
             </div>
         </div>
         <div class="container">
-            {% for recipe in recipes %}
-                {% if loop.index%2 == 1 %}
-            <div class="row">
-                {% endif %}
-
-                <a href="/recipe/{{ recipe.id }}" class="col-xs-12 col-sm-6 {% if loop.index%4 == 3 %}col-sm-push-6 {% elif loop.index%4 == 0 %}col-sm-pull-6 {% endif %}recipe-wrapper">
-                    <div class="recipe {% if loop.index%2 == 1 %}first{% else %}second{% endif %}">
-                        <div class="recipe-description pull-right">
-                            <h2>{{ recipe.name }}</h2>
-                            <h4>Ingredients</h4>
-                            <ul>
-                                {% for ingredient in recipe.ingredients %}
-                                    <li>{{ ingredient.name }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <img src="/static/images/{{ recipe.id }}.jpg" class="img-responsive img-thumbnail pull-left">
-                        <div class="clearfix"></div>
-                    </div>
-                </a>
-
-
-
-                {% if loop.index%2 == 0 %}
-            </div>
-                {% endif %}
-            {% endfor %}
         </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

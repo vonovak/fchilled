@@ -26,10 +26,27 @@ app = Flask(__name__)
 app.config[
     # 'SQLALCHEMY_DATABASE_URI'] = 'mysql://b1cb15a23fa673:f243e376@us-cdbr-iron-east-03.cleardb.net/ad_6797d9adb814dd1'
     'SQLALCHEMY_DATABASE_URI'] = 'db2://user05351:Lf7lc1LEbJls@5.10.125.192:50000/SQLDB'
-app.config['UPLOAD_FOLDER'] = './static/images/upload'
+app.config['UPLOAD_FOLDER'] = './static/images'
+app.config['RECIPES'] = [{'id': 'cuba_libre', 'name': 'Cuba libre',
+                          'ingredients': [{'id': 'bacardi_oro', 'name': 'Bacardi Oro'},
+                                          {'id': 'cocacola', 'name': 'Coca Cola'}, ]},
+                         {'id': 'vodka_with_juice', 'name': 'Vodka with juice',
+                          'ingredients': [{'id': 'vodka', 'name': 'Vodka'}, {'id': 'juice', 'name': 'Juice'}, ]},
+                         {'id': 'mojito', 'name': 'Mojito',
+                          'ingredients': [{'id': 'bacardi_carta_blanco', 'name': 'Bacardi Carta Blanco'},
+                                          {'id': 'lime', 'name': 'Lime'}, {'id': 'mint_leaves', 'name': 'Mint leaves'},
+                                          {'id': 'caster_sugar', 'name': 'Caster sugar'},
+                                          {'id': 'waterbottle', 'name': 'Soda water'},
+                                          {'id': 'cubed_ice', 'name': 'Cubed ice'}, ]},
+                         {'id': 'pina_colada', 'name': 'Pina colada',
+                          'ingredients': [{'id': 'pineapple', 'name': 'Pineapple'}, {'id': 'sugar', 'name': 'Sugar'},
+                                          {'id': 'coconut_cream', 'name': 'Coconut cream'},
+                                          {'id': 'bacardi_carta_blanco', 'name': 'Bacardi Carta Blanco'},
+                                          {'id': 'juice', 'name': 'Pineapple juice'},
+                                          {'id': 'ice', 'name': 'Ice'}, ]}, ]
+
 db.init_app(app)
 lastaction = ""
-
 
 from models.products import Product
 
@@ -43,11 +60,25 @@ def Welcome():
 
     return render_template('index.html', products=products)
 
+
 @app.route('/recipes')
 def Recipes():
-    recipes = {"asd", "123"}
+    return render_template('recipes.html', recipes=app.config['RECIPES'])
 
-    return render_template('recipes.html', recipes=recipes)
+
+@app.route('/recipe/<recipe>')
+def Recipe(recipe):
+    found = False
+    for availableRecipe in app.config['RECIPES']:
+        if availableRecipe['id'] == recipe:
+            foundRecipe = availableRecipe
+            found = True
+            break
+
+    if found:
+        return render_template('recipe.html', recipe=foundRecipe)
+    else:
+        return "Recipe " + recipe + " not found."
 
 
 @app.route('/setup')
@@ -70,9 +101,8 @@ def Setup():
 
 @app.route('/watsontest')
 def watsontest():
-    thread1 = watsonThread(app.config['UPLOAD_FOLDER'] + '/test.jpg', app)
-    thread1.start()
-    return "test file uploaded"
+    return callvisionapi('test.jpg')
+
 
 @app.route('/gcmtest')
 def gcmtest():
@@ -90,7 +120,7 @@ def upload_file():
     myFile.write(base64.b64decode(request.data))
     myFile.close()
 
-    thread1 = watsonThread(filename, app)
+    thread1 = watsonThread(filename)
     thread1.start()
 
     return "File " + filename + " uploaded"
