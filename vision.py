@@ -9,7 +9,7 @@ def callvisionapi(filename):
 
     # print(json.dumps(visual_recognition.list_classifiers(), indent=2))
 
-    with open(join(dirname(__file__), join('uploads/', filename, '.jpg')), 'rb') as image_file:
+    with open(('./uploads/' + filename + '.jpg'), 'rb') as image_file:
         result = (json.dumps(visual_recognition.classify(image_file, classifier_ids=[]), indent=2))
         print result
         return result

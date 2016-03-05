@@ -69,10 +69,6 @@ def upload_file():
     myFile.write(base64.b64decode(request.data))
     myFile.close()
 
-    message = {
-        'status': 'uploaded',
-    }
-
     return jsonify(results=callvisionapi(filename))
 
 
