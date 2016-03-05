@@ -52,7 +52,7 @@ class watsonThread(threading.Thread):
                         # ADDING PRODUCT INTO FRIDGE
 
                         with self.app.app_context():
-                            prod = Product.query.filter_by(tag=tag).first()
+                            prod = Product.query.filter_by(tag=watsonThread.lastaction).first()
                             prod.add(1)
 
 
