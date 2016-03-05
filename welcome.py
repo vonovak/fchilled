@@ -13,28 +13,41 @@
 # limitations under the License.
 
 import os
+import pprint
+
 from flask import Flask, jsonify
-from flask.ext.mysql import MySQL
+from flask import render_template
+from models.products import db
 
 app = Flask(__name__)
-mysql = MySQL()
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://b1cb15a23fa673:f243e376@us-cdbr-iron-east-03.cleardb.net/ad_6797d9adb814dd1'
+db.init_app(app)
 
-# MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = 'b1cb15a23fa673'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'f243e376'
-app.config['MYSQL_DATABASE_DB'] = 'ad_6797d9adb814dd1'
-app.config['MYSQL_DATABASE_HOST'] = 'us-cdbr-iron-east-03.cleardb.net'
-mysql.init_app(app)
+from models.products import Product
 
+with app.app_context():
+    db.create_all() # In case user table doesn't exists already. Else remove it.
 
 @app.route('/')
 def Welcome():
-    return app.send_static_file('index.html')
+    products = Product.query.all()
+    #str = pprint.pformat(products.name)
+    #return str
+    return render_template('index.html', products=products)
 
+@app.route('/setup')
+def Setup():
+    product1 = Product('Coca-Cola', 1)
+    db.session.add(product1)
 
-@app.route('/myapp')
-def WelcomeToMyapp():
-    return 'Welcome again to my app running on Bluemix!'
+    product2 = Product('Juice', 1)
+    db.session.add(product2)
+
+    product3 = Product('Beer', 1)
+    db.session.add(product3)
+
+    db.session.commit()
+    return 'setup'
 
 
 @app.route('/api/people')
@@ -54,17 +67,6 @@ def SayHello(name):
     return jsonify(results=message)
 
 
-@app.route('/api/products')
-def listProducts():
-    cursor = mysql.connect().cursor()
-    cursor.execute("SELECT * FROM products;")
-    data = cursor.fetchall()
-    if data is None:
-        return "no products in your fridge"
-    else:
-        return jsonify(results=data)
-
-
 port = os.getenv('PORT', '5000')
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=int(port))
+    app.run(host='0.0.0.0', port=int(port), debug=True)
