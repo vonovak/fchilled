@@ -103,6 +103,10 @@ def Setup():
 def watsontest():
     return callvisionapi('test.jpg')
 
+@app.route('/revert', methods=['POST'])
+def revert():
+    print 'reverted'
+
 
 @app.route('/gcmtest')
 def gcmtest():
