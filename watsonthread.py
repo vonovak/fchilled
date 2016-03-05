@@ -50,7 +50,7 @@ class watsonThread(threading.Thread):
 
                     # notify UI
                     sendNotification()
-                    notification = {'tag': tag, 'filename': self.filename, 'name':'nothing' }
+                    notification = {'tag': watsonThread.lastaction, 'filename': self.filename, 'name':'nothing' }
                     pusher.trigger('messages', 'new_product', notification)
 
                 watsonThread.lastaction = "inside_fridge"
