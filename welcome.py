@@ -43,6 +43,12 @@ def Welcome():
 
     return render_template('index.html', products=products)
 
+@app.route('/recipes')
+def Recipes():
+    recipes = {"asd", "123"}
+
+    return render_template('recipes.html', recipes=recipes)
+
 
 @app.route('/setup')
 def Setup():
