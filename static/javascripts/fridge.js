@@ -27,7 +27,7 @@ var Form = React.createClass({
   render: function () {
 	return (
 		<div className="form row">
-		  <a href={'#'} className="btn btn-success col-xs-6" onClick={this._onClickYes}>Yes!</a><a href={'#'} className="btn btn-danger col-xs-6" onClick={this._onClick}>No</a>
+		  <a href={'#'} className="btn btn-success btn-lg col-xs-6" onClick={this._onClickYes}>Yes!</a><a href={'#'} className="btn btn-lg btn-danger col-xs-6" onClick={this._onClick}>No</a>
 		</div>
 	);
   }
@@ -46,10 +46,10 @@ var Products = React.createClass({
 		return (
 		<div className="products">
 			<ul>
+                <Product productName="Coca-Cola" productCount={this.props.counts.cocacola} />
+                <Product productName="Juice" productCount={this.props.counts.juice} />
 				<Product productName="Beer" productCount={this.props.counts.beer} />
-				<Product productName="Coca-Cola" productCount={this.props.counts.cocacola} />
-				<Product productName="Juice" productCount={this.props.counts.juice} />
-				<Product productName="Water Bottle" productCount={this.props.counts.waterbottle} />
+				<Product productName="Bottled Water" productCount={this.props.counts.waterbottle} />
 			</ul>
 		</div>
 		);
