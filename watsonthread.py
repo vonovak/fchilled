@@ -23,9 +23,9 @@ class watsonThread(threading.Thread):
 
         tags = callvisionapi(self.filename)
 
-        dt = watsonThread.lastaction_time - time.time()
+        dt = time.time() - watsonThread.lastaction_time
         print dt
-        if(dt > 2):
+        if(dt > 4):
             watsonThread.lastaction = "empty"
         watsonThread.lastaction_time = time.time()
 
