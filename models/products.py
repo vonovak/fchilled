@@ -15,7 +15,9 @@ class Product(db.Model):
     def add(self, count):
         self.count += count
         db.session.commit()
+        print "add " + self.tag
 
     def remove(self, count):
         self.count -= count
         db.session.commit()
+        print "remove" + self.tag
