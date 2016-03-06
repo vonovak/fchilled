@@ -49,13 +49,14 @@
 
             .content {
                 overflow: auto;
+                padding-bottom: 40px;
             }
 
             .background{
 
                 background-image: url('/static/images/fridge.jpg');
                 background-position: center;
-                background-size: 100%;
+                background-size: cover;
                 background-repeat: no-repeat;
 
                 opacity: 0.75;
@@ -138,6 +139,18 @@
                 text-align: center;
                 font-size: 120%;
             }
+
+            .itemName span {
+                background: rgba(255,255,255, 0.8);
+                padding: 5px;
+                padding-left: 20px;
+                padding-right: 20px;
+                color: dodgerblue;
+            }
+            .itemName {
+                margin-bottom: 20px;
+                font-weight: 800;
+            }
         </style>
   </head>
 
@@ -163,16 +176,6 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-sm-6">
-                    <h2></h2>
-                    <ul class="list-unstyled">
-                        {% for product in products %}
-                            <li>{{product.name}}: {{product.count}} </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
         </div>
         </div>
 

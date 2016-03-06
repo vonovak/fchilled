@@ -78,7 +78,7 @@ var Item = React.createClass({
 	}
 	return (
 		<div className="product">
-		  <h2>{data.tag}</h2>
+		  <h2 className="itemName"><span>{data.tag}</span></h2>
 		  <img src={'http://fchilled.eu-gb.mybluemix.net/static/images/upload/' + data.filename + '.jpg'} />
 		  <Form resetFridge={this.props.resetFridge} tag={data.tag} action={data.action} />
 		</div>
