@@ -10,6 +10,7 @@ from notification import sendNotification
 
 class watsonThread(threading.Thread):
     lastaction = "empty"
+    lastaction_time = time.time()
     productpicture = ""
 
     def __init__(self, filename, app):
@@ -21,6 +22,11 @@ class watsonThread(threading.Thread):
         print "Starting " + self.filename
 
         tags = callvisionapi(self.filename)
+
+        if(watsonThread.lastaction_time - time.time() > 2):
+            watsonThread.lastaction = "empty"
+        watsonThread.lastaction_time = time.time()
+
 
         if ("scores" in tags["images"][0]):
             tag = tags["images"][0]["scores"][0]["name"]
