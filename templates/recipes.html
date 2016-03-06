@@ -19,6 +19,7 @@
         <script type="text/javascript" src="http://fchilled.eu-gb.mybluemix.net/static/javascripts/main.js"></script>
         <link rel="manifest" href="http://fchilled.eu-gb.mybluemix.net/static/manifest.json">
         <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+        <script src="//js.pusher.com/3.0/pusher.min.js"></script>
         <style>
             body {
                 background-color: #FBE9E7;
@@ -167,6 +168,16 @@
     <script src="http://fchilled.eu-gb.mybluemix.net/static/javascripts/bootstrap.min.js"></script>
 
     <script>
+        var pusher = new Pusher('99c8766f736643bbdfa2', {
+          cluster: 'eu',
+            encrypted: true
+        });
+        var channel = pusher.subscribe('messages');
+            channel.bind('new_product', function(data) {
+            console.log('updated');
+            document.localion = '/recipes?' + (new Date()).getTime();
+        });
+
         $(function() {
             $(".add-to-cart").click(function() {
                 $(this).html("Items were added to cart");
