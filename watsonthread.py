@@ -23,7 +23,8 @@ class watsonThread(threading.Thread):
 
         tags = callvisionapi(self.filename)
 
-        if(watsonThread.lastaction_time - time.time() > 2):
+        dt = watsonThread.lastaction_time - time.time()
+        if(dt > 2):
             watsonThread.lastaction = "empty"
         watsonThread.lastaction_time = time.time()
 
