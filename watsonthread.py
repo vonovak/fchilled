@@ -1,5 +1,6 @@
 import threading
 import json
+import time
 
 from pusher import Pusher
 from models.products import Product
@@ -8,8 +9,10 @@ from notification import sendNotification
 
 class watsonThread(threading.Thread):
     lastaction = "empty"
+    lastaction_time = time.time()
     emptycount = 0
     productpicture = ""
+
 
     def __init__(self, filename, app):
         threading.Thread.__init__(self)
@@ -20,6 +23,11 @@ class watsonThread(threading.Thread):
         print "Starting " + self.filename
 
         tags = callvisionapi(self.filename)
+
+        dt = watsonThread.lastaction_time - time.time()
+        if(dt.second > 2):
+            watsonThread.lastaction = "empty"
+        watsonThread.lastaction_time = time.time()
 
         if("scores" in tags["images"][0]):
             tag = tags["images"][0]["scores"][0]["name"]
@@ -49,6 +57,7 @@ class watsonThread(threading.Thread):
                     # TO MAKE SURE THE EMPTY TAG WASNT MISRECOGNIZED
                     if(watsonThread.emptycount > 1):
                         watsonThread.lastaction = ""
+                        watsonThread.emptycount = 0
 
                 elif(tag == "inside_fridge" or tag == "hand_empty"):
 
