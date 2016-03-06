@@ -25,7 +25,7 @@ class watsonThread(threading.Thread):
         tags = callvisionapi(self.filename)
 
         dt = watsonThread.lastaction_time - time.time()
-        if(dt.second > 2):
+        if(dt > 2):
             watsonThread.lastaction = "empty"
         watsonThread.lastaction_time = time.time()
 
@@ -48,6 +48,14 @@ class watsonThread(threading.Thread):
 
             print("received tag: ")
             print(tag)
+
+            with self.app.app_context():
+                allProds = Product.query.all()
+                productMap = {}
+                for product in allProds:
+                    productMap[product.tag] = product.count
+                print productMap
+
 
             if(tag != watsonThread.lastaction):
                 if(tag == "empty"):
@@ -72,7 +80,8 @@ class watsonThread(threading.Thread):
 
                         # notify UI
                         sendNotification()
-                        notification = {'tag': watsonThread.lastaction, 'filename': watsonThread.productpicture, 'name':'nothing', 'action':'add' }
+                        notification = {'tag': watsonThread.lastaction, 'filename': watsonThread.productpicture, 'name':'nothing', 'action':'add',
+                                        'productMap': productMap}
                         pusher.trigger('messages', 'new_product', notification)
 
                     watsonThread.lastaction = "inside_fridge"
@@ -91,7 +100,8 @@ class watsonThread(threading.Thread):
 
                         # notify UI
                         sendNotification()
-                        notification = {'tag': tag, 'filename': watsonThread.productpicture, 'name':'nothing', 'action':'remove' }
+                        notification = {'tag': tag, 'filename': watsonThread.productpicture, 'name':'nothing', 'action':'remove',
+                                        'productMap': productMap}
                         pusher.trigger('messages', 'new_product', notification)
 
                     watsonThread.lastaction = tag
