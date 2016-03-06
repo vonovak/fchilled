@@ -10,8 +10,6 @@ from notification import sendNotification
 
 class watsonThread(threading.Thread):
     lastaction = "empty"
-    lastaction_time = time.time()
-    emptycount = 0
     productpicture = ""
 
     def __init__(self, filename, app):
@@ -23,15 +21,6 @@ class watsonThread(threading.Thread):
         print "Starting " + self.filename
 
         tags = callvisionapi(self.filename)
-
-        dt = watsonThread.lastaction_time - time.time()
-
-        if(dt > 2 and watsonThread.emptycount > 0):
-            watsonThread.lastaction = "empty"
-        elif(dt > 5):
-            watsonThread.lastaction = "empty"
-
-        watsonThread.lastaction_time = time.time()
 
         if ("scores" in tags["images"][0]):
             tag = tags["images"][0]["scores"][0]["name"]
@@ -55,18 +44,10 @@ class watsonThread(threading.Thread):
 
             if (tag != watsonThread.lastaction):
                 if (tag == "empty"):
-
-                    # do nothing
-                    watsonThread.emptycount += 1
-                    # TO MAKE SURE THE EMPTY TAG WASNT MISRECOGNIZED
-                    if (watsonThread.emptycount > 1):
-                        watsonThread.lastaction = "empty"
-                        watsonThread.emptycount = 0
-
+                    watsonThread.lastaction = "empty"
                 elif (tag == "inside_fridge" or tag == "hand_empty"):
 
-                    if (
-                                watsonThread.lastaction != "empty" and watsonThread.lastaction != "hand_empty" and watsonThread.lastaction != "inside_fridge"):
+                    if (watsonThread.lastaction != "empty" and watsonThread.lastaction != "hand_empty" and watsonThread.lastaction != "inside_fridge"):
                         # ADDING PRODUCT INTO FRIDGE
 
                         with self.app.app_context():
