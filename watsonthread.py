@@ -25,7 +25,7 @@ class watsonThread(threading.Thread):
 
         dt = time.time() - watsonThread.lastaction_time
         print dt
-        if(dt > 4):
+        if(dt > 10):
             watsonThread.lastaction = "empty"
         watsonThread.lastaction_time = time.time()
 
