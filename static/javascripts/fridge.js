@@ -40,7 +40,7 @@ var Item = React.createClass({
     return (
         <div className="product">
           {data.tag}
-          <img style="transform: rotate(90deg);" src={'http://fchilled.eu-gb.mybluemix.net/static/images/upload/' + data.filename + '.jpg'} />
+          <img style={'transform: rotate(90deg);'} src={'http://fchilled.eu-gb.mybluemix.net/static/images/upload/' + data.filename + '.jpg'} />
           <Form resetFridge={this.props.resetFridge} tag={data.tag} action={data.action} />
         </div>
     );
