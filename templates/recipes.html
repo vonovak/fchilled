@@ -175,7 +175,7 @@
         var channel = pusher.subscribe('messages');
             channel.bind('new_product', function(data) {
             console.log('updated');
-            document.localion = '/recipes?' + (new Date()).getTime();
+            location.reload(true);
         });
 
         $(function() {
