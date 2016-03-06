@@ -45,7 +45,7 @@ var Products = React.createClass({
 	render: function() {
 		return (
 		<div className="products">
-			<ul>
+			<ul className="list-unstyled">
                 <Product productName="Coca-Cola" productCount={this.props.counts.cocacola} />
                 <Product productName="Juice" productCount={this.props.counts.juice} />
 				<Product productName="Beer" productCount={this.props.counts.beer} />

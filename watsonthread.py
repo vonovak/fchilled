@@ -23,7 +23,9 @@ class watsonThread(threading.Thread):
 
         tags = callvisionapi(self.filename)
 
-        if(watsonThread.lastaction_time - time.time() > 2):
+        dt = watsonThread.lastaction_time - time.time()
+        print dt
+        if(dt > 2):
             watsonThread.lastaction = "empty"
         watsonThread.lastaction_time = time.time()
 
@@ -84,7 +86,7 @@ class watsonThread(threading.Thread):
 
                         with self.app.app_context():
                             prod = Product.query.filter_by(tag=tag).first()
-                            if (prod != None):
+                            if (prod != None and prod.count > 0):
                                 prod.remove(1)
 
                         with self.app.app_context():
