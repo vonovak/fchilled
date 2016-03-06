@@ -63,7 +63,12 @@ def Welcome():
 
 @app.route('/recipes')
 def Recipes():
-    return render_template('recipes.html', recipes=app.config['RECIPES'])
+    fridgeContent = []
+    for data in Product.query.all():
+        if data.count > 0:
+            fridgeContent.append(data.tag)
+
+    return render_template('recipes.html', recipes=app.config['RECIPES'], fridgeContent=fridgeContent)
 
 
 @app.route('/recipe/<recipe>')
