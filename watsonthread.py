@@ -24,6 +24,7 @@ class watsonThread(threading.Thread):
         if("scores" in tags["images"][0]):
             tag = tags["images"][0]["scores"][0]["name"]
 
+            print json.dumps(tags["images"][0]["scores"])
 
             pusher = Pusher(
                 app_id='185391',
