@@ -36,7 +36,10 @@ var Form = React.createClass({
 var Product = React.createClass({
 	render: function() {
 		return (
-			<li>{this.props.productName}: {this.props.productCount}</li>
+            <tr>
+			    <th>{this.props.productName}</th>
+                <td>{this.props.productCount}</td>
+            </tr>
 		);
 	}
 })
@@ -44,13 +47,23 @@ var Product = React.createClass({
 var Products = React.createClass({
 	render: function() {
 		return (
-		<div className="products">
-			<ul className="list-unstyled">
-                <Product productName="Coca-Cola" productCount={this.props.counts.cocacola} />
-                <Product productName="Juice" productCount={this.props.counts.juice} />
-				<Product productName="Beer" productCount={this.props.counts.beer} />
-				<Product productName="Bottled Water" productCount={this.props.counts.waterbottle} />
-			</ul>
+		<div className="products row">
+            <div className="col-sm-6 col-sm-offset-3">
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th className="alignLeft">Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <Product productName="Coca-Cola" productCount={this.props.counts.cocacola} />
+                        <Product productName="Juice" productCount={this.props.counts.juice} />
+                        <Product productName="Beer" productCount={this.props.counts.beer} />
+                        <Product productName="Bottled Water" productCount={this.props.counts.waterbottle} />
+                    </tbody>
+                </table>
+            </div>
 		</div>
 		);
 	}
@@ -61,7 +74,7 @@ var Item = React.createClass({
 	var data = this.props.data;
 
 	if (!data.tag) {
-		return <p>Insert items!</p>;
+		return <p></p>;
 	}
 	return (
 		<div className="product">
@@ -122,7 +135,6 @@ var Fridge = React.createClass({
   render: function() {
 	return (
 	  <div className="commentBox">
-		<h1>Fridge:</h1>
 		<Item data={this.state.data} resetFridge={this.resetFridge} />
 		<Products counts={this.state.counts} />
 	  </div>
