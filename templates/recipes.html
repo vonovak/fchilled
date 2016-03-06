@@ -38,6 +38,20 @@
                 width: 140px;
             }
 
+            a {
+                color: #000000;
+                text-decoration: none;
+                display: block;
+            }
+
+            a:hover {
+                color: #6E3909;
+            }
+
+            .btn {
+                border-radius: 0;
+            }
+
             .header {
                 background-color: #FF5722;
                 margin-bottom: 5px;
@@ -59,15 +73,6 @@
                 border-bottom: 2px solid #FDD835;
             }
 
-            a {
-                color: #000000;
-                text-decoration: none;
-            }
-
-            a:hover {
-                color: #6E3909;
-            }
-
             .recipe-wrapper {
                 padding: 5px;
             }
@@ -86,7 +91,19 @@
                 word-wrap: break-word;
             }
 
+            @font-face {
+                font-family: glyphicon;
+                src: url("/static/fonts/bootstrap/glyphicons-halflings-regular.ttf");
+            }
 
+            .glyphicon {
+                font-family: glyphicon;
+            }
+
+            .added-to-cart .glyphicon-remove:before {
+                content: "\e116";
+                color: #31708f;
+            }
         </style>
     </head>
     <body>
@@ -94,7 +111,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h1>Recipes</h1>
+                        <h1>Recipes<button class="btn btn-success pull-right hidden btn-order" data-toggle="modal" data-target="#orderSentModal">Order cart online</button></h1>
                     </div>
                 </div>
             </div>
@@ -105,21 +122,22 @@
             <div class="row">
                 {% endif %}
 
-                <a href="/recipe/{{ recipe.id }}" class="col-xs-12 col-sm-6 {% if loop.index%4 == 3 %}col-sm-push-6 {% elif loop.index%4 == 0 %}col-sm-pull-6 {% endif %}recipe-wrapper">
-                    <div class="recipe {% if loop.index%2 == 1 %}first{% else %}second{% endif %}">
+                <div class="col-xs-12 col-sm-6 {% if loop.index%4 == 3 %}col-sm-push-6 {% elif loop.index%4 == 0 %}col-sm-pull-6 {% endif %}recipe-wrapper">
+                    <a href="/recipe/{{ recipe.id }}" class="recipe {% if loop.index%2 == 1 %}first{% else %}second{% endif %}">
                         <div class="recipe-description pull-right">
                             <h2>{{ recipe.name }}</h2>
                             <h4>Ingredients</h4>
-                            <ul>
+                            <ul class="list-unstyled">
                                 {% for ingredient in recipe.ingredients %}
-                                    <li>{{ ingredient.name }}</li>
+                                    <li>{% if ingredient.id in fridgeContent %}<span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>{% else %}<span class="glyphicon glyphicon-remove text-danger" aria-hidden="true"></span>{% endif %} {{ ingredient.name }}</li>
                                 {% endfor %}
                             </ul>
                         </div>
                         <img src="/static/images/{{ recipe.id }}.jpg" class="img-responsive img-thumbnail pull-left">
                         <div class="clearfix"></div>
-                    </div>
-                </a>
+                    </a>
+                    <button class="btn btn-block btn-primary add-to-cart">Add what's missing to cart</button>
+                </div>
 
 
 
@@ -129,9 +147,33 @@
             {% endfor %}
         </div>
 
+        <div class="modal fade" id="orderSentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> Your order has been sent</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>It will be delivered <strong>Today</strong> between <strong>7 and 9PM</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="http://fchilled.eu-gb.mybluemix.net/static/javascripts/bootstrap.min.js"></script>
+
+    <script>
+        $(function() {
+            $(".add-to-cart").click(function() {
+                $(this).html("Items were added to cart");
+                $(this).parent().addClass("added-to-cart");
+                $(".btn-order").removeClass("hidden");
+            });
+        });
+    </script>
     </body>
 </html>

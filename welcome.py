@@ -63,7 +63,12 @@ def Welcome():
 
 @app.route('/recipes')
 def Recipes():
-    return render_template('recipes.html', recipes=app.config['RECIPES'])
+    fridgeContent = []
+    for data in Product.query.all():
+        if data.count > 0:
+            fridgeContent.append(data.tag)
+
+    return render_template('recipes.html', recipes=app.config['RECIPES'], fridgeContent=fridgeContent)
 
 
 @app.route('/recipe/<recipe>')
@@ -114,7 +119,12 @@ def Setup():
 
 @app.route('/watsontest')
 def watsontest():
-    return callvisionapi('test.jpg')
+    thread1 = watsonThread('35',app)
+    thread1.start()
+    thread2 = watsonThread('83',app)
+    thread2.start()
+
+    return 'th started'
 
 @app.route('/revert', methods=['POST'])
 def revert():
