@@ -25,8 +25,11 @@ class watsonThread(threading.Thread):
         tags = callvisionapi(self.filename)
 
         dt = watsonThread.lastaction_time - time.time()
-        if(dt > 2):
+        if(dt > 2 and watsonThread.emptycount > 0):
             watsonThread.lastaction = "empty"
+        elif(dt > 5):
+            watsonThread.lastaction = "empty"
+
         watsonThread.lastaction_time = time.time()
 
         if("scores" in tags["images"][0]):
