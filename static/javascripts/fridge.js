@@ -3,11 +3,16 @@ var Form = React.createClass({
 
 	_onClick: function(e){
 		e.preventDefault;
-		this.props.resetFridge();
+		this.props.resetFridge(this.props.tag, this.props.action);
 		this.sendMessage(this.props.tag, this.props.action);
 		console.log('No!');
 
 	},
+
+    _onClickYes: function(e) {
+        e.preventDefault;
+        this.props.resetFridge('', '');
+    },
 
 	sendMessage: function(tag, action) {
 		var message = {
@@ -22,7 +27,7 @@ var Form = React.createClass({
   render: function () {
 	return (
 		<div className="form">
-		  <a href={'#'}>Yes!</a> | <a href={'#'} onClick={this._onClick}>No</a>
+		  <a href={'#'} onClick={this._onClickYes}>Yes!</a> | <a href={'#'} onClick={this._onClick}>No</a>
 		</div>
 	);
   }
@@ -61,7 +66,7 @@ var Item = React.createClass({
 	return (
 		<div className="product">
 		  <h2>{data.tag}</h2>
-		  <img class={'rotated'} src={'http://fchilled.eu-gb.mybluemix.net/static/images/upload/' + data.filename + '.jpg'} />
+		  <img src={'http://fchilled.eu-gb.mybluemix.net/static/images/upload/' + data.filename + '.jpg'} />
 		  <Form resetFridge={this.props.resetFridge} tag={data.tag} action={data.action} />
 		</div>
 	);
@@ -76,11 +81,23 @@ var Fridge = React.createClass({
 	};
   },
 
-	resetFridge: function() {
-		this.setState({
-			data: {tag:'', name:'', filename:'', action:''},
-			counts: {beer: countData.beer, cocacola: countData.cocacola, waterbottle: countData.waterbottle, juice: countData.juice}
-		});
+	resetFridge: function(tag, action) {
+        this.state.data = {tag:'', name:'', filename:'', action:''}
+        var diff = 1;
+        if (action == 'add') {
+            diff = -1;
+        }
+        if (tag == 'cocacola') {
+            this.state.counts.cocacola += diff;
+        } else if (tag == 'juice') {
+            this.state.counts.juice += diff;
+        } else if (tag == 'waterbottle') {
+            this.state.counts.waterbottle += diff;
+        } else if (tag == 'beer') {
+            this.state.counts.beer += diff;
+        }
+
+		this.setState(this.state);
 		console.log('Fridge reseted!');
 	},
 
