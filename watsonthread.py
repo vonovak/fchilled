@@ -24,6 +24,10 @@ class watsonThread(threading.Thread):
         if("scores" in tags["images"][0]):
             tag = tags["images"][0]["scores"][0]["name"]
 
+            # optimization
+            if(tag == "empty" and len(tags["images"][0]["scores"])>1):
+                tag = tags["images"][0]["scores"][1]["name"]
+
             print json.dumps(tags["images"][0]["scores"])
 
             pusher = Pusher(
