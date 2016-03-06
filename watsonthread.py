@@ -49,6 +49,7 @@ class watsonThread(threading.Thread):
                     # TO MAKE SURE THE EMPTY TAG WASNT MISRECOGNIZED
                     if(watsonThread.emptycount > 1):
                         watsonThread.lastaction = ""
+                        watsonThread.emptycount = 0
 
                 elif(tag == "inside_fridge" or tag == "hand_empty"):
 
