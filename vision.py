@@ -10,5 +10,5 @@ def callvisionapi(filename):
     # print(json.dumps(visual_recognition.list_classifiers(), indent=2))
 
     with open(('./static/images/upload/' + filename + '.jpg'), 'rb') as image_file:
-        result = visual_recognition.classify(image_file, classifier_ids=["beer_334776759","waterbottle_298206814","empty_74623183","hand_empty_1903958159","cocacola_1857481479","inside_fridge_937863237","juice_1146476597"])
+        result = visual_recognition.classify(image_file, classifier_ids=["beer_637889868","waterbottle_298206814","empty_74623183","hand_empty_1903958159","cocacola_1857481479","inside_fridge_937863237","juice_1146476597"])
         return result
