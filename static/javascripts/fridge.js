@@ -4,13 +4,17 @@ var Form = React.createClass({
     _onClick: function(e){
         e.preventDefault;
         this.props.resetFridge();
-        this.sendMessage(this.props.tag);
+        this.sendMessage(this.props.tag, this.props.action);
         console.log('No!');
 
     },
 
-    sendMessage: function(tag) {
-        $.post('http://fchilled.eu-gb.mybluemix.net/revert', tag).success(function() {
+    sendMessage: function(tag, action) {
+        var message = {
+            tag: tag,
+            action: action
+        }
+        $.post('/revert', message).success(function() {
             console.log('posted');
         });
     },
@@ -36,8 +40,8 @@ var Item = React.createClass({
     return (
         <div className="product">
           {data.tag}
-          <img src={'http://fchilled.eu-gb.mybluemix.net/static/images/upload/' + data.filename + '.jpg'} />
-          <Form resetFridge={this.props.resetFridge} tag={data.tag} />
+          <img class={'rotated'} src={'http://fchilled.eu-gb.mybluemix.net/static/images/upload/' + data.filename + '.jpg'} />
+          <Form resetFridge={this.props.resetFridge} tag={data.tag} action={data.action} />
         </div>
     );
   }
@@ -45,11 +49,11 @@ var Item = React.createClass({
 
 var Fridge = React.createClass({
   getInitialState: function() {
-    return {data: {tag:'', name:'', filename:''}};
+    return {data: {tag:'', name:'', filename:'', action:''}};
   },
 
     resetFridge: function() {
-        this.setState({data: {tag:'', name:'', filename:''}});
+        this.setState({data: {tag:'', name:'', filename:'', action:''}});
         console.log('Fridge reseted!');
     },
 
@@ -63,7 +67,7 @@ var Fridge = React.createClass({
 
   componentDidMount: function() {
     this.productShelf.bind('new_product', function(product){
-      this.setState({data: {tag: product.tag, name: product.name, filename: product.filename}})
+      this.setState({data: {tag: product.tag, name: product.name, filename: product.filename, action:product.action}})
     }, this);
   },
 
