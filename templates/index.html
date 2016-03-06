@@ -59,6 +59,14 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/static/javascripts/bootstrap.min.js"></script>
 
+    <script>
+        var countData = {
+            {% for product in products %}
+                {{product.tag}}: {{product.count}},
+            {% endfor %}
+        };
+    </script>
+
     <script type="text/babel" src="/static/javascripts/fridge.js"></script>
   </body>
 
