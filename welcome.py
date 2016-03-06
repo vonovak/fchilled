@@ -119,7 +119,12 @@ def Setup():
 
 @app.route('/watsontest')
 def watsontest():
-    return callvisionapi('test.jpg')
+    thread1 = watsonThread('35',app)
+    thread1.start()
+    thread2 = watsonThread('83',app)
+    thread2.start()
+
+    return 'th started'
 
 @app.route('/revert', methods=['POST'])
 def revert():
